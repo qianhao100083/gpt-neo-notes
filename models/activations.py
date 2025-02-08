@@ -2,6 +2,8 @@ import mesh_tensorflow as mtf
 import tensorflow.compat.v1 as tf
 import random
 
+# 自定义激活函数
+
 BASE_FNS = {'gelu': mtf.gelu,
             'relu': mtf.relu,
             'sigmoid': mtf.sigmoid,

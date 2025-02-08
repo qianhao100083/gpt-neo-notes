@@ -2,7 +2,14 @@ import mesh_tensorflow as mtf
 import tensorflow.compat.v1 as tf
 import random
 
-# 自定义激活函数
+'''
+自定义激活函数
+- 该文件定义了多个基础和自定义的激活函数。
+- 提供了一个接口 `get_activation_fn`，可以根据配置参数返回相应的激活函数。
+- 使用了 `mesh_tensorflow` 来实现分布式张量计算。
+'''
+
+# 基础激活函数集合 (`BASE_FNS`)
 
 BASE_FNS = {'gelu': mtf.gelu,
             'relu': mtf.relu,
@@ -18,6 +25,7 @@ BASE_FNS = {'gelu': mtf.gelu,
             'softplus': mtf.softplus
             }
 
+# 一些辅助函数和自定义激活函数的实现。
 
 def _arcsinh(x):
     return mtf.log(x + mtf.sqrt(1 + x ** 2))
@@ -42,6 +50,7 @@ def _elish(x):
     exp = mtf.exp(x)
     return cond * x / (1 + exp) + (1 - cond) * (exp - 1) / (1 / exp + 1)
 
+# 自定义激活函数集合 (`CUSTOM_FNS`)
 
 CUSTOM_FNS = {'lrelu001': lambda x: mtf.leaky_relu(x, alpha=0.01),
               'lrelu020': lambda x: mtf.leaky_relu(x, alpha=0.20),
@@ -77,6 +86,7 @@ CUSTOM_FNS = {'lrelu001': lambda x: mtf.leaky_relu(x, alpha=0.01),
               'softplusmone': lambda x: mtf.softplus(x) - 1
               }
 
+# 获取激活函数的接口 (`get_activation_fn`)
 
 def get_activation_fn(params):
     if "activation_fn" in params:
